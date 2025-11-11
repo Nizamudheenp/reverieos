@@ -1,65 +1,60 @@
-import Image from "next/image";
+"use client";
+
+import { signIn, useSession } from "next-auth/react";
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Brain, LogIn } from "lucide-react";
 
 export default function Home() {
+  const { data: session, status } = useSession();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (status === "authenticated") {
+      router.push("/dashboard");
+    }
+  }, [status, router]);
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.js file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
+    <div className="min-h-screen flex flex-col justify-center items-center bg-gradient-to-br from-indigo-100 via-white to-purple-100 text-gray-800 p-6">
+      {status === "unauthenticated" && (
+        <>
+          <div className="flex items-center gap-3 mb-4">
+            <Brain className="w-10 h-10 text-indigo-600" />
+            <h1 className="text-4xl font-bold text-indigo-700">ReverieOS</h1>
+          </div>
+
+          <Card className="max-w-lg shadow-xl border-0 bg-white/80 backdrop-blur-lg rounded-2xl">
+            <CardContent className="p-8 text-center space-y-4">
+              <h2 className="text-2xl font-semibold">
+                Your Digital Dream Operating System 🌙
+              </h2>
+              <p className="text-gray-600 leading-relaxed">
+                Capture your thoughts, dreams, and emotions in one peaceful space.
+                Let AI reflect on your patterns and reveal the hidden meaning behind your mind.
+              </p>
+              <ul className="text-gray-700 text-sm mt-4 space-y-2">
+                <li>Write your daily dreams</li>
+                <li>View emotional insights</li>
+                <li>Visualize your growth</li>
+              </ul>
+
+              <Button
+                onClick={() => signIn("google")}
+                className="w-full mt-6 bg-indigo-600 hover:bg-indigo-700 text-white flex items-center justify-center gap-2 py-2"
+              >
+                <LogIn className="w-5 h-5" /> Sign in with Google
+              </Button>
+            </CardContent>
+          </Card>
+
+          <p className="mt-6 text-sm text-gray-500">
+            © 2025 ReverieOS – Crafted with calm.
           </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
+        </>
+      )}
     </div>
   );
 }
