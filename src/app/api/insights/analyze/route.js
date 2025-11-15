@@ -3,25 +3,45 @@ import { authOptions } from "../../auth/[...nextauth]/route";
 import { connectDB } from "@/lib/mongodb";
 import Dream from "@/models/Dream";
 import Insight from "@/models/Insight";
+import { groq } from "@/lib/groq";
 
-function mockAnalyzeText(text) {
-  // Very simple mock: counts some words and picks random tones
-  const lower = text.toLowerCase();
-  const keywords = [];
-  if (lower.includes("water")) keywords.push("water");
-  if (lower.includes("flight")) keywords.push("flight");
-  if (lower.includes("chase")) keywords.push("chase");
-  if (lower.includes("friend")) keywords.push("friend");
+async function analyzeWithGroq(text) {
+  const prompt = `
+You are an AI dream analyst. Analyze the following dream logs and return:
+1. A short summary (2-4 sentences)
+2. Top 3 emotions with score (0-1)
+3. 3-6 important symbolic keywords
 
-  const emotions = [
-    { label: "calm", score: Math.random() * 0.5 },
-    { label: "anxious", score: Math.random() * 0.5 },
-    { label: "happy", score: Math.random() * 0.5 },
-  ].sort((a,b)=>b.score-a.score);
+Return JSON ONLY with this structure:
+{
+ "summary": "...",
+ "emotions": [{"label": "...", "score": 0.00}],
+ "keywords": ["...", "..."]
+}
 
-  const summary = `A short reflection: your dreams include ${keywords.slice(0,3).join(", ") || "various symbols"} and show a mix of ${emotions[0].label} and ${emotions[1].label}.`;
+Dream text:
+${text}
+`;
 
-  return { summary, emotions, keywords };
+  const response = await groq.chat.completions.create({
+    model: "llama-3.1-8b-instant",
+    messages: [{ role: "user", content: prompt }],
+    temperature: 0.3
+  });
+
+  let result;
+  try {
+    result = JSON.parse(response.choices[0].message.content);
+  } catch (err) {
+    console.error("JSON parse error:", err);
+    result = {
+      summary: "Unable to interpret fully, but dreams show psychological activity.",
+      emotions: [{ label: "neutral", score: 0.5 }],
+      keywords: []
+    };
+  }
+
+  return result;
 }
 
 export async function POST(req) {
@@ -34,29 +54,24 @@ export async function POST(req) {
 
   await connectDB();
 
-  // fetch the relevant dreams
   let dreams;
   if (Array.isArray(body.dreamIds) && body.dreamIds.length) {
     dreams = await Dream.find({ _id: { $in: body.dreamIds }, userId: session.user.id });
   } else {
-    dreams = await Dream.find({ userId: session.user.id })
-      .sort({ createdAt: -1 })
-      .limit(n);
+    dreams = await Dream.find({ userId: session.user.id }).sort({ createdAt: -1 }).limit(n);
   }
 
   const text = dreams.map(d => d.content || d.title || "").join("\n\n");
 
-  // Use mock analysis for now
-  const analysis = mockAnalyzeText(text);
+  const ai = await analyzeWithGroq(text);
 
-  // store insight for later quick retrieval
   const saved = await Insight.create({
     userId: session.user.id,
     dreamIds: dreams.map(d => d._id),
-    summary: analysis.summary,
-    emotions: analysis.emotions,
-    keywords: analysis.keywords,
-    source: "mock",
+    summary: ai.summary,
+    emotions: ai.emotions,
+    keywords: ai.keywords,
+    source: "groq",
   });
 
   return new Response(JSON.stringify(saved), { status: 200 });
