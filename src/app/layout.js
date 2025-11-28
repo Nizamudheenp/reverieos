@@ -1,3 +1,4 @@
+import ThemeProvider from "@/components/ThemeProvider";
 import "./globals.css";
 import SessionProviderWrapper from "./providers/SessionProviderWrapper";
 
@@ -10,7 +11,9 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body>
-        <SessionProviderWrapper>{children}</SessionProviderWrapper>
+        <ThemeProvider>
+          <SessionProviderWrapper>{children}</SessionProviderWrapper>
+        </ThemeProvider>
       </body>
     </html>
   );
