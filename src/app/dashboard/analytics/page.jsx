@@ -41,29 +41,29 @@ export default function AnalyticsPage() {
 
   return (
     <div className="p-6 max-w-5xl mx-auto space-y-6">
-      <h1 className="text-2xl font-semibold text-indigo-800">Analytics</h1>
+      <h1 className="text-2xl font-semibold text-primary">Analytics</h1>
 
-      {loading && <p className="text-gray-500">Loading analytics...</p>}
+      {loading && <p className="text-muted-foreground">Loading analytics...</p>}
 
       {overview && (
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-          <div className="bg-white/70 p-4 rounded-2xl shadow">
-            <div className="text-sm text-gray-500">Total dreams</div>
-            <div className="text-2xl font-semibold">{overview.total}</div>
+          <div className="bg-card p-4 rounded-2xl shadow">
+            <div className="text-sm text-muted-foreground">Total dreams</div>
+            <div className="text-2xl font-semibold text-foreground">{overview.total}</div>
           </div>
-          <div className="bg-white/70 p-4 rounded-2xl shadow">
-            <div className="text-sm text-gray-500">Today</div>
-            <div className="text-2xl font-semibold">{overview.today}</div>
+          <div className="bg-card p-4 rounded-2xl shadow">
+            <div className="text-sm text-muted-foreground">Today</div>
+            <div className="text-2xl font-semibold text-foreground">{overview.today}</div>
           </div>
-          <div className="bg-white/70 p-4 rounded-2xl shadow">
-            <div className="text-sm text-gray-500">Last 7 days</div>
-            <div className="text-2xl font-semibold">{overview.last7}</div>
+          <div className="bg-card p-4 rounded-2xl shadow">
+            <div className="text-sm text-muted-foreground">Last 7 days</div>
+            <div className="text-2xl font-semibold text-foreground">{overview.last7}</div>
           </div>
         </div>
       )}
 
-      <div className="bg-white/70 p-4 rounded-2xl shadow">
-        <h3 className="font-semibold text-indigo-700 mb-2">Dreams (last 14 days)</h3>
+      <div className="bg-card p-4 rounded-2xl shadow">
+        <h3 className="font-semibold text-primary mb-2">Dreams (last 14 days)</h3>
         <div style={{ width: "100%", height: 220 }}>
           <ResponsiveContainer>
             <LineChart data={freq}>
@@ -77,8 +77,8 @@ export default function AnalyticsPage() {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-        <div className="bg-white/70 p-4 rounded-2xl shadow">
-          <h3 className="font-semibold text-indigo-700 mb-2">Emotion distribution</h3>
+        <div className="bg-card p-4 rounded-2xl shadow">
+          <h3 className="font-semibold text-primary mb-2">Emotion distribution</h3>
           <div style={{ width: "100%", height: 240 }}>
             <ResponsiveContainer>
               <PieChart>
@@ -91,8 +91,8 @@ export default function AnalyticsPage() {
           </div>
         </div>
 
-        <div className="bg-white/70 p-4 rounded-2xl shadow">
-          <h3 className="font-semibold text-indigo-700 mb-2">Top tags</h3>
+        <div className="bg-card p-4 rounded-2xl shadow">
+          <h3 className="font-semibold text-primary mb-2">Top tags</h3>
           <div style={{ width: "100%", height: 240 }}>
             <ResponsiveContainer>
               <BarChart data={tags}>
@@ -106,15 +106,14 @@ export default function AnalyticsPage() {
         </div>
       </div>
 
-{/* AI Insight */}
-      <div className="bg-white/70 p-4 rounded-2xl shadow">
-        <h3 className="font-semibold text-indigo-700 mb-2">AI Insight</h3>
+      <div className="bg-card p-4 rounded-2xl shadow">
+        <h3 className="font-semibold text-primary mb-2">AI Insight</h3>
         {!insight ? (
-          <p className="text-gray-500">No insight yet. Add dreams to generate an insight.</p>
+          <p className="text-muted-foreground">No insight yet. Add dreams to generate an insight.</p>
         ) : (
           <>
-            <p className="text-gray-700 whitespace-pre-line">{insight.summary}</p>
-            <div className="mt-3 text-sm text-gray-600">
+            <p className="text-foreground whitespace-pre-line">{insight.summary}</p>
+            <div className="mt-3 text-sm text-muted-foreground">
               <strong>Keywords:</strong> {insight.keywords?.join(", ") || "—"}
             </div>
           </>

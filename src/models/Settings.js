@@ -9,20 +9,17 @@ const SettingsSchema = new mongoose.Schema(
       required: true,
     },
 
-    // Appearance preferences
     theme: {
       type: String,
       enum: ["light", "dark", "system"],
       default: "system",
     },
 
-    // Export preferences (future use)
     autoExport: {
       type: Boolean,
       default: false,
     },
 
-    // Notifications (future use)
     notifications: {
       email: { type: Boolean, default: false },
       push: { type: Boolean, default: false },

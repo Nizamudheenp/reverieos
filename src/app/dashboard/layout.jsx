@@ -29,23 +29,22 @@ export default function DashboardLayout({ children }) {
     ];
 
     return (
-        <div className="flex min-h-screen bg-gradient-to-br from-indigo-50 to-purple-100 text-gray-800">
-            {/* Sidebar */}
+        <div className="flex min-h-screen bg-background text-foreground">
             <motion.aside
                 animate={{ width: collapsed ? 80 : 240 }}
-                className="relative flex flex-col p-4 bg-white/30 backdrop-blur-md shadow-lg border-r border-white/20 transition-all"
+                className="relative flex flex-col p-4 bg-card/30 backdrop-blur-md shadow-lg border-r border-border/20 transition-all"
             >
                 <div className="flex items-center justify-between mb-6">
                     {!collapsed && (
-                        <h1 className="text-xl font-bold text-indigo-700 flex items-center gap-2">
-                            <Brain className="w-6 h-6" /> ReverieOS
+                        <h1 className="text-xl font-bold text-primary flex items-center gap-2">
+                            <Brain className="w-6 h-6 text-primary" /> ReverieOS
                         </h1>
                     )}
                     <Button
                         variant="ghost"
                         size="icon"
                         onClick={() => setCollapsed(!collapsed)}
-                        className="rounded-full hover:bg-indigo-100"
+                        className="rounded-full hover:bg-muted"
                     >
                         <Menu className="w-5 h-5" />
                     </Button>
@@ -56,22 +55,21 @@ export default function DashboardLayout({ children }) {
                         <Link key={name} href={href}>
                             <div
                                 className={cn(
-                                    "flex items-center gap-3 p-3 rounded-lg transition-all hover:bg-indigo-100 cursor-pointer",
+                                    "flex items-center gap-3 p-3 rounded-lg transition-all hover:bg-muted cursor-pointer",
                                     collapsed && "justify-center"
                                 )}
                             >
-                                <Icon className="w-5 h-5 text-indigo-600" />
+                                <Icon className="w-5 h-5 text-primary" />
                                 {!collapsed && <span>{name}</span>}
                             </div>
                         </Link>
                     ))}
                 </nav>
 
-                {/* User */}
                 {session && (
                     <div
                         className={cn(
-                            "mt-auto flex items-center gap-3 p-3 bg-white/50 rounded-lg border border-white/30",
+                            "mt-auto flex items-center gap-3 p-3 bg-card/50 rounded-lg border border-border/30",
                             collapsed && "justify-center"
                         )}
                     >
@@ -80,19 +78,19 @@ export default function DashboardLayout({ children }) {
                             width={36}
                             height={36}
                             alt="user"
-                            className="rounded-full border border-indigo-300"
+                            className="rounded-full border border-primary/40"
                         />
                         {!collapsed && (
                             <div>
                                 <p className="text-sm font-medium">{session.user.name}</p>
-                                <p className="text-xs text-gray-500">Online</p>
+                                <p className="text-xs text-muted-foreground">Online</p>
                             </div>
                         )}
                     </div>
                 )}
             </motion.aside>
 
-            {/* Main Content */}
+{/* Main Content */}
             <main className="flex-1 p-6 overflow-y-auto">{children}</main>
         </div>
     );

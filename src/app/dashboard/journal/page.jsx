@@ -55,7 +55,7 @@ export default function JournalPage() {
 
   const handleDelete = async (id, createdAt) => {
     const created = new Date(createdAt).getTime();
-    const limit = Date.now() - 60 * 60 * 1000; // 1 hour ago
+    const limit = Date.now() - 60 * 60 * 1000;
 
     if (created < limit) {
       alert("Delete is allowed only within 1 hour of adding.");
@@ -78,51 +78,61 @@ export default function JournalPage() {
 
   return (
     <div className="max-w-3xl mx-auto p-6 space-y-6">
-      <h1 className="text-3xl font-semibold text-indigo-800">Dream Journal 💭</h1>
+      <h1 className="text-3xl font-semibold text-primary">Dream Journal </h1>
 
-      <div className="bg-white/70 p-4 rounded-2xl shadow space-y-3">
+      <div className="bg-card p-4 rounded-2xl shadow space-y-3">
         <textarea
           value={newDream}
           placeholder="Describe your dream..."
           onChange={(e) => setNewDream(e.target.value)}
-          className="w-full p-3 rounded-xl border border-gray-200 text-gray-700 focus:ring-2 focus:ring-indigo-300 outline-none resize-none"
+          className="w-full p-3 rounded-xl border border-input bg-background text-foreground 
+                     focus:ring-2 focus:ring-primary outline-none resize-none"
           rows={4}
         />
 
         <button
           onClick={handleAddDream}
           disabled={submitting}
-          className="w-full py-2 rounded-xl bg-indigo-600 text-white hover:bg-indigo-700 transition-all disabled:opacity-50"
+          className="w-full py-2 rounded-xl bg-primary text-primary-foreground 
+                     hover:opacity-90 transition-all disabled:opacity-50"
         >
           {submitting ? "Saving..." : "Save Dream"}
         </button>
       </div>
 
       {loading ? (
-        <p className="text-gray-500 text-center">Loading dreams...</p>
+        <p className="text-muted-foreground text-center">Loading dreams...</p>
       ) : dreams.length === 0 ? (
-        <p className="text-gray-500 text-center mt-8">No dreams recorded yet.</p>
+        <p className="text-muted-foreground text-center mt-8">
+          No dreams recorded yet.
+        </p>
       ) : (
         <motion.div layout className="space-y-4">
           {dreams.map((dream) => {
             const created = new Date(dream.createdAt);
-            const isDeletable = Date.now() - created.getTime() <= 60 * 60 * 1000;
+            const isDeletable =
+              Date.now() - created.getTime() <= 60 * 60 * 1000;
 
             return (
               <motion.div
                 key={dream._id}
                 layout
-                className="p-4 bg-white/70 rounded-2xl shadow"
+                className="p-4 bg-card rounded-2xl shadow"
               >
-                <p className="text-gray-700 whitespace-pre-line">{dream.content}</p>
-                <small className="text-gray-500 block mt-2">
+                <p className="text-foreground whitespace-pre-line">
+                  {dream.content}
+                </p>
+
+                <small className="text-muted-foreground block mt-2">
                   {created.toLocaleString()}
                 </small>
 
                 {isDeletable && (
                   <button
-                    onClick={() => handleDelete(dream._id, dream.createdAt)}
-                    className="text-red-600 text-sm font-semibold mt-2"
+                    onClick={() =>
+                      handleDelete(dream._id, dream.createdAt)
+                    }
+                    className="text-destructive text-sm font-semibold mt-2"
                   >
                     Delete
                   </button>

@@ -12,10 +12,9 @@ export async function DELETE() {
 
   await connectDB();
 
-  const userEmail = session.user.email; // optional
+  const userEmail = session.user.email; 
   const userId = session.user.id;
 
-  // remove user's documents
   await Promise.all([
     User.deleteOne({ email: userEmail }),
     Dream.deleteMany({ userId }),

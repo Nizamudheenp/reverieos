@@ -35,7 +35,6 @@ export default function SettingsPage() {
     setTheme(newTheme);
     localStorage.setItem("theme", newTheme);
 
-    // persist to server
     try {
       await fetch("/api/settings", {
         method: "PUT",
@@ -47,7 +46,6 @@ export default function SettingsPage() {
       showToast("Failed to save theme");
     }
 
-    // apply immediately
     const root = document.documentElement;
     if (newTheme === "light") root.classList.remove("dark");
     else if (newTheme === "dark") root.classList.add("dark");
@@ -56,7 +54,6 @@ export default function SettingsPage() {
       prefersDark ? root.classList.add("dark") : root.classList.remove("dark");
     }
 
-    showToast("Theme updated");
   }
 
   async function exportDreams() {
@@ -73,7 +70,7 @@ export default function SettingsPage() {
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;
-      a.download = `dreams-${new Date().toISOString().slice(0,10)}.json`;
+      a.download = `dreams-${new Date().toISOString().slice(0, 10)}.json`;
       document.body.appendChild(a);
       a.click();
       a.remove();
@@ -113,7 +110,6 @@ export default function SettingsPage() {
       const res = await fetch("/api/account/delete", { method: "DELETE" });
       const data = await res.json();
       if (res.ok && data.success) {
-        // sign out and redirect home
         await signOut({ callbackUrl: "/" });
       } else {
         showToast(data?.error || "Delete failed");
@@ -126,68 +122,80 @@ export default function SettingsPage() {
     }
   }
 
-  if (loading) return <p className="p-6 text-gray-500">Loading settings…</p>;
+  if (loading) return <p className="p-6 text-gray-500 dark:text-gray-400">Loading settings…</p>;
 
   return (
-    <div className="max-w-2xl  mx-auto p-6 space-y-6">
+    <div className="max-w-2xl mx-auto p-6 space-y-6">
       {toast && (
-        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 bg-black text-white px-4 py-2 rounded-lg text-sm z-50">
+        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 bg-neutral-900 dark:bg-neutral-700 text-white px-4 py-2 rounded-lg text-sm z-50">
           {toast}
         </div>
       )}
 
-      <h1 className="text-2xl font-semibold text-indigo-800">Settings</h1>
+      <h1 className="text-2xl font-semibold text-indigo-800 dark:text-indigo-300">Settings</h1>
 
-      {/* Appearance */}
-      <section className="bg-white/70 p-4 rounded-2xl shadow space-y-3">
-        <h2 className="font-semibold text-indigo-700">Appearance</h2>
+      <section className="bg-white/70 dark:bg-neutral-800/70 p-4 rounded-2xl shadow space-y-3">
+        <h2 className="font-semibold text-indigo-700 dark:text-indigo-300">Appearance</h2>
 
-        <div className="flex gap-3">
+        <div className="flex gap-3 text-gray-700 dark:text-gray-300">
           <label className="flex items-center gap-2">
-            <input type="radio" name="theme" value="system" checked={theme === "system"} onChange={(e)=>updateTheme(e.target.value)} /> System
+            <input type="radio" name="theme" value="system" checked={theme === "system"} onChange={(e) => updateTheme(e.target.value)} /> System
           </label>
           <label className="flex items-center gap-2">
-            <input type="radio" name="theme" value="light" checked={theme === "light"} onChange={(e)=>updateTheme(e.target.value)} /> Light
+            <input type="radio" name="theme" value="light" checked={theme === "light"} onChange={(e) => updateTheme(e.target.value)} /> Light
           </label>
           <label className="flex items-center gap-2">
-            <input type="radio" name="theme" value="dark" checked={theme === "dark"} onChange={(e)=>updateTheme(e.target.value)} /> Dark
+            <input type="radio" name="theme" value="dark" checked={theme === "dark"} onChange={(e) => updateTheme(e.target.value)} /> Dark
           </label>
         </div>
-        <p className="text-sm text-gray-500">Theme selection stored for your account.</p>
+
+        <p className="text-sm text-gray-500 dark:text-gray-400">
+          Theme selection stored for your account.
+        </p>
       </section>
 
-      {/* Data */}
-      <section className="bg-white/70 p-4 rounded-2xl shadow space-y-3">
-        <h2 className="font-semibold text-indigo-700">Data</h2>
+      <section className="bg-white/70 dark:bg-neutral-800/70 p-4 rounded-2xl shadow space-y-3">
+        <h2 className="font-semibold text-indigo-700 dark:text-indigo-300">Data</h2>
 
         <div className="flex gap-3">
-          <button className="px-4 py-2 bg-indigo-600 text-white rounded-lg disabled:opacity-50" onClick={exportDreams} disabled={busy}>
+          <button
+            className="px-4 py-2 bg-gray-700 dark:bg-gray-600 text-white rounded-lg disabled:opacity-50"
+            onClick={exportDreams}
+            disabled={busy}
+          >
             Export all dreams (JSON)
           </button>
 
-          <button className="px-4 py-2 bg-yellow-500 text-white rounded-lg disabled:opacity-50" onClick={clearDreams} disabled={busy}>
+          <button
+            className="px-4 py-2 bg-gray-700 dark:bg-gray-600 text-white rounded-lg disabled:opacity-50"
+            onClick={clearDreams}
+            disabled={busy}
+          >
             Clear all dreams
           </button>
         </div>
 
-        <p className="text-sm text-gray-500">Export downloads a JSON file. Clear deletes only dreams & insights; your account remains.</p>
+        <p className="text-sm text-gray-500 dark:text-gray-400">
+          Export downloads a JSON file. Clear deletes only dreams & insights; your account remains.
+        </p>
       </section>
 
-      {/* Account */}
-      <section className="bg-white/70 p-4 rounded-2xl shadow space-y-3">
-        <h2 className="font-semibold text-indigo-700">Account</h2>
+      <section className="bg-white/70 dark:bg-neutral-800/70 p-4 rounded-2xl shadow space-y-3">
+        <h2 className="font-semibold text-indigo-700 dark:text-indigo-300">Account</h2>
 
         <div className="flex gap-3">
-          <button className="px-4 py-2 bg-gray-700 text-white rounded-lg" onClick={() => signOut()}>
+          <button className="px-4 py-2 bg-gray-700 dark:bg-gray-600 text-white rounded-lg" onClick={() => signOut({ callbackUrl: "/" })} disabled={busy}>
             Sign out
           </button>
 
-          <button className="px-4 py-2 bg-red-600 text-white rounded-lg" onClick={deleteAccount} disabled={busy}>
+          <button className="px-4 py-2 bg-red-500 text-white rounded-lg" onClick={deleteAccount} disabled={busy}>
             Delete account permanently
           </button>
         </div>
 
-        <p className="text-sm text-gray-500">Deleting account removes your user record, dreams, insights, and settings.</p>
+        <p className="text-sm text-gray-500 dark:text-gray-400">
+          Deleting account removes your user record, dreams, insights, and settings.
+        </p>
       </section>
     </div>
   );

@@ -22,7 +22,6 @@ export default function InsightsPage() {
       setInsight(data);
     }
 
-
     setLoading(false);
   };
 
@@ -32,37 +31,38 @@ export default function InsightsPage() {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
     >
-      <h1 className="text-2xl font-semibold text-indigo-800">
-        AI Dream Insights 🧠
+      <h1 className="text-2xl font-semibold text-primary">
+        AI Dream Insights
       </h1>
 
-      {loading && <p className="text-gray-500">Generating insights...</p>}
+      {loading && <p className="text-muted-foreground">Generating insights...</p>}
 
       {!loading && !insight && (
-        <p className="text-gray-500">
+        <p className="text-muted-foreground">
           No insights yet — add a dream in the Journal.
         </p>
       )}
 
       {insight && (
-        <div className="bg-white/70 p-4 rounded-2xl shadow">
-          <h3 className="font-semibold text-indigo-700">Summary</h3>
-          <p className="mt-2 text-gray-700 whitespace-pre-line">
+        <div className="bg-card p-4 rounded-2xl shadow">
+          <h3 className="font-semibold text-primary">Summary</h3>
+
+          <p className="mt-2 text-foreground whitespace-pre-line">
             {insight.summary}
           </p>
 
-          <div className="mt-4">
+          <div className="mt-4 text-foreground">
             <strong>Keywords:</strong>{" "}
             {insight.keywords?.length ? insight.keywords.join(", ") : "—"}
           </div>
 
-          <div className="mt-2">
+          <div className="mt-2 text-foreground">
             <strong>Top Emotions:</strong>{" "}
             {insight.emotions?.length
               ? insight.emotions
-                .slice(0, 3)
-                .map((e) => `${e.label} (${e.score.toFixed(2)})`)
-                .join(", ")
+                  .slice(0, 3)
+                  .map((e) => `${e.label} (${e.score.toFixed(2)})`)
+                  .join(", ")
               : "—"}
           </div>
         </div>

@@ -2,19 +2,12 @@
 
 import { useEffect, useState } from "react";
 
-/**
- * ThemeProvider
- * - reads /api/settings (GET)
- * - applies theme to <html> by toggling `.dark`
- * - stores chosen theme in localStorage for instant behavior
- */
 export default function ThemeProvider({ children }) {
   const [theme, setTheme] = useState(() => {
     if (typeof window === "undefined") return "system";
     return localStorage.getItem("theme") || "system";
   });
 
-  // load saved server setting once on mount (won't block render)
   useEffect(() => {
     let mounted = true;
     async function load() {
@@ -27,14 +20,14 @@ export default function ThemeProvider({ children }) {
           localStorage.setItem("theme", data.theme);
         }
       } catch (e) {
-        // ignore
+        console.log(e);
+        
       }
     }
     load();
     return () => (mounted = false);
   }, []);
 
-  // apply theme when `theme` changes
   useEffect(() => {
     const root = document.documentElement;
 
@@ -44,7 +37,6 @@ export default function ThemeProvider({ children }) {
       } else if (t === "dark") {
         root.classList.add("dark");
       } else {
-        // system
         const prefersDark =
           window.matchMedia &&
           window.matchMedia("(prefers-color-scheme: dark)").matches;
@@ -54,7 +46,6 @@ export default function ThemeProvider({ children }) {
 
     apply(theme);
 
-    // if system, listen for changes
     if (theme === "system" && window.matchMedia) {
       const mq = window.matchMedia("(prefers-color-scheme: dark)");
       const listener = (e) => {
