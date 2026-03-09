@@ -37,7 +37,7 @@ export default function AnalyticsPage() {
     loadAll();
   }, []);
 
-  const COLORS = ["#6366F1","#636363","#F97316","#10B981","#EF4444","#8B5CF6","#F59E0B"];
+  const COLORS = ["#6366F1", "#636363", "#F97316", "#10B981", "#EF4444", "#8B5CF6", "#F59E0B"];
 
   return (
     <div className="p-6 max-w-5xl mx-auto space-y-6">
@@ -67,7 +67,7 @@ export default function AnalyticsPage() {
         <div style={{ width: "100%", height: 220 }}>
           <ResponsiveContainer>
             <LineChart data={freq}>
-              <XAxis dataKey="date" tickFormatter={(d)=>d.slice(5)} />
+              <XAxis dataKey="date" tickFormatter={(d) => d.slice(5)} />
               <YAxis allowDecimals={false} />
               <Tooltip />
               <Line type="monotone" dataKey="count" stroke="#6366F1" strokeWidth={2} />
@@ -97,7 +97,7 @@ export default function AnalyticsPage() {
             <ResponsiveContainer>
               <BarChart data={tags}>
                 <XAxis dataKey="tag" />
-                <YAxis allowDecimals={false}/>
+                <YAxis allowDecimals={false} />
                 <Tooltip />
                 <Bar dataKey="count" fill="#6366F1" />
               </BarChart>
@@ -107,16 +107,20 @@ export default function AnalyticsPage() {
       </div>
 
       <div className="bg-card p-4 rounded-2xl shadow">
-        <h3 className="font-semibold text-primary mb-2">AI Insight</h3>
+        <h3 className="font-semibold text-primary mb-2">Deep AI Insight</h3>
         {!insight ? (
           <p className="text-muted-foreground">No insight yet. Add dreams to generate an insight.</p>
         ) : (
-          <>
-            <p className="text-foreground whitespace-pre-line">{insight.summary}</p>
-            <div className="mt-3 text-sm text-muted-foreground">
-              <strong>Keywords:</strong> {insight.keywords?.join(", ") || "—"}
+          <div className="space-y-4">
+            <p className="text-foreground whitespace-pre-line leading-relaxed">{insight.summary}</p>
+            <div className="flex flex-wrap gap-2 mt-3">
+              {insight.keywords?.map((kw, i) => (
+                <span key={i} className="px-2 py-1 bg-primary/10 text-primary rounded-md text-xs font-medium">
+                  #{kw}
+                </span>
+              ))}
             </div>
-          </>
+          </div>
         )}
       </div>
     </div>
