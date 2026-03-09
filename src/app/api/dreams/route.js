@@ -7,31 +7,44 @@ import { groq } from "@/lib/groq";
 
 async function classifyDreamWithGroq(text) {
   const prompt = `
-You are a concise dream classifier. Given a short dream text, return JSON ONLY:
+You are an expert mystical astrologer. 
+Analyze the dream and provide top 3 tags, emotions, and a deep traditional/astrological meaning.
+
+Important: You MUST provide a "meaning" that is at least 2 sentences long. 
+Interpret symbols like animals, water, or flight based on folklore and tradition.
+
+Return JSON ONLY:
 {
-  "tags": ["water", "flight"],
-  "emotions": [{"label":"anxious","score":0.7},{"label":"curious","score":0.3}],
-  "sentiment": 0.25
+  "tags": ["symbol1", "symbol2"],
+  "emotions": [{"label":"emotion","score":0.5}],
+  "sentiment": 0.5,
+  "meaning": "Since you saw [X], it traditionally signifies [Y]. This suggests that in the coming days you should [Z]."
 }
-Rules:
-- Always output valid JSON only.
-- Provide top 3 tags (if available).
-- Provide up to 3 emotions with scores that sum <= 1.
-- 'sentiment' is 0..1 (0 negative, 1 positive).
+
 Dream:
 ${text}
 `;
+
+  console.log("Consulting Groq for dream:", text.substring(0, 50) + "...");
+
   const ai = await groq.chat.completions.create({
     model: "llama-3.1-8b-instant",
-    messages: [{ role: "user", content: prompt }],
-    temperature: 0.2
+    messages: [
+      { role: "system", content: "You are a mystical astrologer who always responds in JSON with a 'meaning' field." },
+      { role: "user", content: prompt }
+    ],
+    temperature: 0.7,
+    response_format: { type: "json_object" }
   });
 
+  const content = ai.choices[0].message.content;
+  console.log("Groq raw response:", content);
+
   try {
-    return JSON.parse(ai.choices[0].message.content);
+    return JSON.parse(content);
   } catch (err) {
     console.error("groq parse error:", err);
-    return { tags: [], emotions: [], sentiment: 0.5 };
+    return { tags: [], emotions: [], sentiment: 0.5, meaning: "The celestial bodies are obscured today. Try reflecting deeper." };
   }
 }
 
@@ -70,17 +83,23 @@ export async function POST(req) {
     length: content.split(/\s+/).filter(Boolean).length
   });
 
+  let result = { tags: [], emotions: [], sentiment: 0.5, meaning: "The stars are silent on this vision." };
   try {
-    const result = await classifyDreamWithGroq(content);
-    await Dream.findByIdAndUpdate(created._id, {
-      tags: result.tags || [],
-      emotions: result.emotions || [],
-      sentimentScore: typeof result.sentiment === "number" ? result.sentiment : 0.5
-    });
+    result = await classifyDreamWithGroq(content);
   } catch (err) {
     console.error("classification failed", err);
   }
 
+  const updatedDream = await Dream.findByIdAndUpdate(
+    created._id,
+    {
+      tags: result.tags || [],
+      emotions: result.emotions || [],
+      sentimentScore: typeof result.sentiment === "number" ? result.sentiment : 0.5,
+      meaning: result.meaning || "The celestial alignment is unclear for this vision. Seek wisdom within."
+    },
+    { new: true } // Return the modified document
+  );
 
   try {
     await fetch(`${process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000"}/api/analytics/insight`, {
@@ -92,7 +111,7 @@ export async function POST(req) {
     console.warn("insight regen top-level", e);
   }
 
-  return Response.json(created);
+  return Response.json(updatedDream);
 }
 
 export async function DELETE(req) {

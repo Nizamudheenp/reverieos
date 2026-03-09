@@ -5,7 +5,7 @@ import DashboardCard from "./DashboardCard";
 
 export default function DashboardClient({ session, cards }) {
   const [mounted, setMounted] = useState(false);
-  const [reflections, setReflections] = useState(null); 
+  const [reflections, setReflections] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -14,13 +14,13 @@ export default function DashboardClient({ session, cards }) {
     async function loadReflections() {
       setLoading(true);
       try {
-        const res = await fetch("/api/insights"); 
+        const res = await fetch("/api/insights");
         const data = await res.json();
 
         if (data.message === "No insights yet" || data.message === "No dreams") {
           setReflections(null);
         } else {
-          setReflections(data); 
+          setReflections(data);
         }
       } catch (err) {
         console.error("Failed to fetch reflections:", err);
@@ -33,7 +33,7 @@ export default function DashboardClient({ session, cards }) {
     loadReflections();
   }, []);
 
-  if (!mounted) return null; 
+  if (!mounted) return null;
 
   return (
     <motion.div
@@ -49,7 +49,7 @@ export default function DashboardClient({ session, cards }) {
         transition={{ delay: 0.2 }}
       >
         <h2 className="text-3xl font-semibold text-indigo-800 dark:text-indigo-300">
-          Welcome back, {session?.user?.name || "Guest"}! 
+          Welcome back, {session?.user?.name || "Guest"}!
         </h2>
         <p className="text-gray-600 dark:text-gray-300 mt-3 max-w-2xl mx-auto">
           Dive into your digital dream world — track emotions, analyze insights, and grow self-awareness.
@@ -61,7 +61,7 @@ export default function DashboardClient({ session, cards }) {
           <DashboardCard key={card.title} {...card} delay={0.2 + i * 0.1} />
         ))}
       </section>
- {/* Recent Reflections */}
+      {/* Recent Reflections */}
       <motion.section
         className="bg-white/60 dark:bg-gray-800/60 backdrop-blur-lg rounded-2xl shadow p-6"
         initial={{ opacity: 0, y: 15 }}
@@ -76,23 +76,36 @@ export default function DashboardClient({ session, cards }) {
 
         {!loading && !reflections && (
           <p className="text-gray-600 dark:text-gray-300 text-sm">
-            You haven’t logged any dreams yet. Start by adding one in your Journal 
+            You haven’t logged any dreams yet. Start by adding one in your Journal
           </p>
         )}
 
         {!loading && reflections && (
-          <div className="text-gray-600 dark:text-gray-300 text-sm space-y-2">
-            <p><strong>Summary:</strong> {reflections.summary}</p>
-            <p><strong>Keywords:</strong> {reflections.keywords?.length ? reflections.keywords.join(", ") : "—"}</p>
-            <p>
-              <strong>Top Emotions:</strong>{" "}
-              {reflections.emotions?.length
-                ? reflections.emotions
+          <div className="text-gray-600 dark:text-gray-300 text-sm space-y-4">
+            <div>
+              <p className="font-semibold text-indigo-700 dark:text-indigo-300">AI Insight:</p>
+              <p className="mt-1">{reflections.summary}</p>
+            </div>
+
+            <div className="flex flex-wrap gap-2">
+              {reflections.keywords?.map((kw, i) => (
+                <span key={i} className="px-2 py-1 bg-indigo-100 dark:bg-indigo-900/40 text-indigo-600 dark:text-indigo-300 rounded-md text-xs">
+                  #{kw}
+                </span>
+              ))}
+            </div>
+
+            <div>
+              <p className="font-semibold text-indigo-700 dark:text-indigo-300">Dominant Emotions:</p>
+              <p className="mt-1">
+                {reflections.emotions?.length
+                  ? reflections.emotions
                     .slice(0, 3)
-                    .map((e) => `${e.label} (${e.score.toFixed(2)})`)
+                    .map((e) => `${e.label} (${(e.score * 100).toFixed(0)}%)`)
                     .join(", ")
-                : "—"}
-            </p>
+                  : "—"}
+              </p>
+            </div>
           </div>
         )}
       </motion.section>

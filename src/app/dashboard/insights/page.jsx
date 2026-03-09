@@ -44,27 +44,36 @@ export default function InsightsPage() {
       )}
 
       {insight && (
-        <div className="bg-card p-4 rounded-2xl shadow">
-          <h3 className="font-semibold text-primary">Summary</h3>
+        <div className="bg-card p-6 rounded-2xl shadow space-y-6">
+          <section>
+            <h3 className="text-sm font-bold text-indigo-500 uppercase tracking-widest mb-2">Deep Reflection</h3>
+            <p className="text-foreground leading-relaxed whitespace-pre-line text-lg">
+              {insight.summary}
+            </p>
+          </section>
 
-          <p className="mt-2 text-foreground whitespace-pre-line">
-            {insight.summary}
-          </p>
+          <section>
+            <h3 className="text-sm font-bold text-indigo-500 uppercase tracking-widest mb-3">Core Symbols</h3>
+            <div className="flex flex-wrap gap-2">
+              {insight.keywords?.map((kw, i) => (
+                <span key={i} className="px-3 py-1 bg-indigo-100 dark:bg-indigo-900/40 text-indigo-600 dark:text-indigo-300 rounded-full text-xs font-semibold">
+                  #{kw}
+                </span>
+              ))}
+            </div>
+          </section>
 
-          <div className="mt-4 text-foreground">
-            <strong>Keywords:</strong>{" "}
-            {insight.keywords?.length ? insight.keywords.join(", ") : "—"}
-          </div>
-
-          <div className="mt-2 text-foreground">
-            <strong>Top Emotions:</strong>{" "}
-            {insight.emotions?.length
-              ? insight.emotions
-                  .slice(0, 3)
-                  .map((e) => `${e.label} (${e.score.toFixed(2)})`)
-                  .join(", ")
-              : "—"}
-          </div>
+          <section>
+            <h3 className="text-sm font-bold text-indigo-500 uppercase tracking-widest mb-3">Emotional Landscape</h3>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+              {insight.emotions?.slice(0, 3).map((e, i) => (
+                <div key={i} className="p-3 bg-background border border-input rounded-xl text-center">
+                  <div className="text-lg font-bold text-foreground">{(e.score * 100).toFixed(0)}%</div>
+                  <div className="text-xs text-muted-foreground uppercase tracking-tight">{e.label}</div>
+                </div>
+              ))}
+            </div>
+          </section>
         </div>
       )}
     </motion.div>
