@@ -7,10 +7,6 @@ export default function InsightsPage() {
   const [insight, setInsight] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    loadInsight();
-  }, []);
-
   const loadInsight = async () => {
     setLoading(true);
     const res = await fetch("/api/insights", { method: "GET" });
@@ -24,6 +20,11 @@ export default function InsightsPage() {
 
     setLoading(false);
   };
+
+  useEffect(() => {
+    loadInsight();
+  }, []);
+
 
   return (
     <motion.div
