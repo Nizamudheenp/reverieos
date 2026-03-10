@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import { signOut } from "next-auth/react";
 
 export default function SettingsPage() {
-  const [theme, setTheme] = useState("system");
   const [loading, setLoading] = useState(true);
   const [busy, setBusy] = useState(false);
   const [toast, setToast] = useState(null);
@@ -22,8 +21,6 @@ export default function SettingsPage() {
     try {
       const res = await fetch("/api/settings");
       if (!res.ok) return setLoading(false);
-      const data = await res.json();
-      setTheme(data.theme || "system");
     } catch (error) {
       console.error("load settings", error);
     } finally {
@@ -31,30 +28,6 @@ export default function SettingsPage() {
     }
   }
 
-  async function updateTheme(newTheme) {
-    setTheme(newTheme);
-    localStorage.setItem("theme", newTheme);
-
-    try {
-      await fetch("/api/settings", {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ theme: newTheme }),
-      });
-    } catch (e) {
-      console.error("update theme failed", e);
-      showToast("Failed to save theme");
-    }
-
-    const root = document.documentElement;
-    if (newTheme === "light") root.classList.remove("dark");
-    else if (newTheme === "dark") root.classList.add("dark");
-    else {
-      const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-      prefersDark ? root.classList.add("dark") : root.classList.remove("dark");
-    }
-
-  }
 
   async function exportDreams() {
     setBusy(true);
@@ -132,34 +105,14 @@ export default function SettingsPage() {
         </div>
       )}
 
-      <h1 className="text-2xl font-semibold text-indigo-800 dark:text-indigo-300">Settings</h1>
+      <h1 className="text-2xl font-bold neon-text text-primary">Settings</h1>
 
-      <section className="bg-white/70 dark:bg-neutral-800/70 p-4 rounded-2xl shadow space-y-3">
-        <h2 className="font-semibold text-indigo-700 dark:text-indigo-300">Appearance</h2>
+      <section className="neon-card p-6 space-y-4">
+        <h2 className="font-semibold text-primary uppercase tracking-widest text-sm">Data Management</h2>
 
-        <div className="flex gap-3 text-gray-700 dark:text-gray-300">
-          <label className="flex items-center gap-2">
-            <input type="radio" name="theme" value="system" checked={theme === "system"} onChange={(e) => updateTheme(e.target.value)} /> System
-          </label>
-          <label className="flex items-center gap-2">
-            <input type="radio" name="theme" value="light" checked={theme === "light"} onChange={(e) => updateTheme(e.target.value)} /> Light
-          </label>
-          <label className="flex items-center gap-2">
-            <input type="radio" name="theme" value="dark" checked={theme === "dark"} onChange={(e) => updateTheme(e.target.value)} /> Dark
-          </label>
-        </div>
-
-        <p className="text-sm text-gray-500 dark:text-gray-400">
-          Theme selection stored for your account.
-        </p>
-      </section>
-
-      <section className="bg-white/70 dark:bg-neutral-800/70 p-4 rounded-2xl shadow space-y-3">
-        <h2 className="font-semibold text-indigo-700 dark:text-indigo-300">Data</h2>
-
-        <div className="flex gap-3">
+        <div className="flex flex-wrap gap-4">
           <button
-            className="px-4 py-2 bg-gray-700 dark:bg-gray-600 text-white rounded-lg disabled:opacity-50"
+            className="px-6 py-3 bg-primary text-black hover:bg-primary/90 rounded-xl transition-all duration-300 font-black uppercase tracking-widest shadow-[0_0_20px_rgba(oklch(0.7_0.35_300),0.3)]"
             onClick={exportDreams}
             disabled={busy}
           >
@@ -167,7 +120,7 @@ export default function SettingsPage() {
           </button>
 
           <button
-            className="px-4 py-2 bg-gray-700 dark:bg-gray-600 text-white rounded-lg disabled:opacity-50"
+            className="px-6 py-3 bg-primary text-black hover:bg-primary/90 rounded-xl transition-all duration-300 font-black uppercase tracking-widest shadow-[0_0_20px_rgba(oklch(0.7_0.35_300),0.3)]"
             onClick={clearDreams}
             disabled={busy}
           >
@@ -175,26 +128,34 @@ export default function SettingsPage() {
           </button>
         </div>
 
-        <p className="text-sm text-gray-500 dark:text-gray-400">
+        <p className="text-sm text-muted-foreground">
           Export downloads a JSON file. Clear deletes only dreams & insights; your account remains.
         </p>
       </section>
 
-      <section className="bg-white/70 dark:bg-neutral-800/70 p-4 rounded-2xl shadow space-y-3">
-        <h2 className="font-semibold text-indigo-700 dark:text-indigo-300">Account</h2>
+      <section className="neon-card p-6 space-y-4">
+        <h2 className="font-semibold text-primary">Account Actions</h2>
 
-        <div className="flex gap-3">
-          <button className="px-4 py-2 bg-gray-700 dark:bg-gray-600 text-white rounded-lg" onClick={() => signOut({ callbackUrl: "/" })} disabled={busy}>
+        <div className="flex flex-wrap gap-4">
+          <button
+            className="px-6 py-3 bg-primary text-black hover:bg-primary/90 rounded-xl transition-all duration-300 font-black uppercase tracking-widest shadow-[0_0_20px_rgba(oklch(0.7_0.35_300),0.3)]"
+            onClick={() => signOut({ callbackUrl: "/" })}
+            disabled={busy}
+          >
             Sign out
           </button>
 
-          <button className="px-4 py-2 bg-red-500 text-white rounded-lg" onClick={deleteAccount} disabled={busy}>
-            Delete account permanently
+          <button
+            className="px-6 py-3 bg-red-500/10 hover:bg-red-500/20 text-red-500 rounded-xl transition-all duration-300 border border-red-500/20 disabled:opacity-50"
+            onClick={deleteAccount}
+            disabled={busy}
+          >
+            Delete Account
           </button>
         </div>
 
-        <p className="text-sm text-gray-500 dark:text-gray-400">
-          Deleting account removes your user record, dreams, insights, and settings.
+        <p className="text-sm text-muted-foreground">
+          Warning: Deleting your account will remove all dreams, insights, and account data permanently.
         </p>
       </section>
     </div>

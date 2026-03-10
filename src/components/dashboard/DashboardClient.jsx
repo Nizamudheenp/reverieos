@@ -43,15 +43,15 @@ export default function DashboardClient({ session, cards }) {
       transition={{ duration: 0.6 }}
     >
       <motion.section
-        className="text-center mt-6"
+        className="text-center mt-8 mb-12"
         initial={{ opacity: 0, y: 15 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.2 }}
+        transition={{ delay: 0.1, duration: 0.5 }}
       >
-        <h2 className="text-3xl font-semibold text-indigo-800 dark:text-indigo-300">
-          Welcome back, {session?.user?.name || "Guest"}!
+        <h2 className="text-5xl font-bold text-primary neon-text tracking-tight uppercase italic leading-tight">
+          Welcome to your <br /> Subconscious Connections
         </h2>
-        <p className="text-gray-600 dark:text-gray-300 mt-3 max-w-2xl mx-auto">
+        <p className="text-muted-foreground mt-4 max-w-2xl mx-auto text-lg leading-relaxed">
           Dive into your digital dream world — track emotions, analyze insights, and grow self-awareness.
         </p>
       </motion.section>
@@ -63,12 +63,12 @@ export default function DashboardClient({ session, cards }) {
       </section>
       {/* Recent Reflections */}
       <motion.section
-        className="bg-white/60 dark:bg-gray-800/60 backdrop-blur-lg rounded-2xl shadow p-6"
-        initial={{ opacity: 0, y: 15 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.6 }}
+        className="neon-card p-8 border-primary/20"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.3 }}
       >
-        <h3 className="text-xl font-semibold text-indigo-700 dark:text-indigo-300 mb-3">
+        <h3 className="text-2xl font-bold text-primary neon-text mb-6">
           Recent Reflections
         </h3>
 
@@ -81,30 +81,36 @@ export default function DashboardClient({ session, cards }) {
         )}
 
         {!loading && reflections && (
-          <div className="text-gray-600 dark:text-gray-300 text-sm space-y-4">
-            <div>
-              <p className="font-semibold text-indigo-700 dark:text-indigo-300">AI Insight:</p>
-              <p className="mt-1">{reflections.summary}</p>
+          <div className="text-foreground space-y-8">
+            <div className="space-y-3">
+              <p className="font-bold text-secondary uppercase tracking-widest text-xs">AI Insight</p>
+              <p className="text-xl font-medium leading-relaxed">{reflections.summary}</p>
             </div>
 
             <div className="flex flex-wrap gap-2">
               {reflections.keywords?.map((kw, i) => (
-                <span key={i} className="px-2 py-1 bg-indigo-100 dark:bg-indigo-900/40 text-indigo-600 dark:text-indigo-300 rounded-md text-xs">
+                <span key={i} className="px-3 py-1 bg-primary/10 border border-primary/30 text-primary rounded-full text-xs font-semibold">
                   #{kw}
                 </span>
               ))}
             </div>
 
-            <div>
-              <p className="font-semibold text-indigo-700 dark:text-indigo-300">Dominant Emotions:</p>
-              <p className="mt-1">
-                {reflections.emotions?.length
-                  ? reflections.emotions
-                    .slice(0, 3)
-                    .map((e) => `${e.label} (${(e.score * 100).toFixed(0)}%)`)
-                    .join(", ")
-                  : "—"}
-              </p>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+              <div className="space-y-4">
+                <p className="font-bold text-secondary uppercase tracking-widest text-xs">Dominant Emotions</p>
+                <div className="flex flex-wrap gap-4">
+                  {reflections.emotions?.length
+                    ? reflections.emotions
+                      .slice(0, 3)
+                      .map((e, i) => (
+                        <div key={i} className="flex flex-col">
+                          <span className="text-2xl font-bold text-primary neon-text">{(e.score * 100).toFixed(0)}%</span>
+                          <span className="text-[11px] uppercase font-semibold text-muted-foreground">{e.label}</span>
+                        </div>
+                      ))
+                    : "—"}
+                </div>
+              </div>
             </div>
           </div>
         )}
