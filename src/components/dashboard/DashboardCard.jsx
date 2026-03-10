@@ -13,19 +13,18 @@ export default function DashboardCard({ title, desc, href, delay = 0 }) {
       <Link
         href={href}
         className="
-          block p-6 
-          bg-white/70 dark:bg-gray-800/60 
-          backdrop-blur-lg 
-          rounded-2xl shadow 
-          hover:shadow-md hover:scale-[1.02] 
-          transition-all
+          group relative block p-8
+          neon-card
+          hover:scale-[1.02] hover:border-primary/50
+          transition-all duration-300
         "
       >
-        <h3 className="font-semibold text-indigo-700 dark:text-indigo-300 text-lg mb-1">
+        <div className="absolute inset-0 bg-primary/5 opacity-0 group-hover:opacity-100 transition-opacity rounded-2xl" />
+        <h3 className="relative font-bold text-primary neon-text text-2xl mb-2 tracking-tight">
           {title}
         </h3>
 
-        <p className="text-sm text-gray-600 dark:text-gray-300">
+        <p className="relative text-base text-muted-foreground group-hover:text-foreground/90 transition-colors leading-relaxed">
           {desc}
         </p>
       </Link>

@@ -9,12 +9,6 @@ const SettingsSchema = new mongoose.Schema(
       required: true,
     },
 
-    theme: {
-      type: String,
-      enum: ["light", "dark", "system"],
-      default: "system",
-    },
-
     autoExport: {
       type: Boolean,
       default: false,

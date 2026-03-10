@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
+import { Brain } from "lucide-react";
 
 export default function JournalPage() {
   const [dreams, setDreams] = useState([]);
@@ -83,57 +84,62 @@ export default function JournalPage() {
   return (
     <div className="max-w-3xl mx-auto p-6 space-y-8">
       <div className="flex items-center justify-between">
-        <h1 className="text-3xl font-semibold text-primary">Journaling My Dream</h1>
-        <div className="text-xs font-bold text-indigo-500 bg-indigo-50 px-3 py-1 rounded-full border border-indigo-100 uppercase tracking-widest">
+        <h1 className="text-4xl font-bold text-primary neon-text tracking-tight">Journal</h1>
+        <div className="text-[11px] font-bold text-secondary bg-secondary/10 px-4 py-1 rounded-full border border-secondary/20 uppercase tracking-widest">
           Mystical Insights
         </div>
       </div>
 
-      <div className="bg-card p-6 rounded-2xl shadow-lg border border-primary/5 space-y-4">
+      <motion.div
+        className="neon-card p-8 space-y-6"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+      >
         <textarea
           value={newDream}
-          placeholder="I saw a snake in my dream..."
+          placeholder="I saw a dragon flying over a crystalline city..."
           onChange={(e) => setNewDream(e.target.value)}
-          className="w-full p-4 rounded-xl border border-input bg-background/50 text-foreground 
-                     focus:ring-2 focus:ring-primary outline-none resize-none text-lg leading-relaxed placeholder:italic"
+          className="w-full p-6 bg-background/50 rounded-2xl border border-white/5 text-foreground 
+                     focus:border-primary/50 focus:ring-4 focus:ring-primary/10 outline-none resize-none text-xl leading-relaxed placeholder:text-muted-foreground/30 transition-all duration-300 min-h-[180px]"
           rows={4}
         />
 
         <button
           onClick={handleAddDream}
           disabled={submitting}
-          className="w-full py-3 rounded-xl bg-indigo-600 text-white font-semibold
-                     hover:bg-indigo-700 transition-all disabled:opacity-50 shadow-md flex items-center justify-center gap-2"
+          className="w-full py-4 rounded-xl bg-primary text-white font-bold uppercase tracking-widest
+                     hover:bg-primary/90 hover:scale-[1.01] active:scale-95 transition-all duration-300 disabled:opacity-50 
+                     shadow-lg flex items-center justify-center gap-3"
         >
           {submitting ? (
             <>
               <motion.div
                 animate={{ rotate: 360 }}
                 transition={{ repeat: Infinity, duration: 1, ease: "linear" }}
-                className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full"
+                className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full"
               />
-              Consulting the Stars...
+              Interpreting...
             </>
           ) : "Decode Dream Meaning"}
         </button>
-      </div>
+      </motion.div>
 
       {lastResult && (
         <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
-          className="p-6 bg-gradient-to-br from-indigo-600 to-violet-700 rounded-2xl shadow-xl text-white space-y-4"
+          className="p-8 bg-gradient-to-br from-primary to-purple-800 rounded-2xl shadow-2xl text-white space-y-4"
         >
           <div className="flex items-center gap-3">
             <span className="text-2xl">✨</span>
-            <h2 className="text-xl font-bold uppercase tracking-widest text-indigo-100">The AI Astrologer Says:</h2>
+            <h2 className="text-xl font-bold uppercase tracking-widest">AI Interpretation:</h2>
           </div>
-          <p className="text-lg italic leading-relaxed font-medium">
-            {lastResult.meaning || "The stars are shifting, but their meaning is yet to be revealed. Please check back in a moment or try again."}
+          <p className="text-xl italic leading-relaxed font-medium">
+            &quot;{lastResult.meaning || "The stars are shifting, but their meaning is yet to be revealed..."}&quot;
           </p>
           <div className="flex flex-wrap gap-2 pt-2">
             {lastResult.tags?.map((t, i) => (
-              <span key={i} className="px-3 py-1 bg-white/20 rounded-full text-xs font-bold">#{t}</span>
+              <span key={i} className="px-3 py-1 bg-white/20 border border-white/10 rounded-full text-xs font-bold font-mono">#{t}</span>
             ))}
           </div>
         </motion.div>
@@ -156,27 +162,29 @@ export default function JournalPage() {
               <motion.div
                 key={dream._id}
                 layout
-                className="p-4 bg-card rounded-2xl shadow"
+                className="neon-card p-6 border-transparent hover:border-primary/30 transition-all duration-500 overflow-hidden relative group"
               >
-                <p className="text-foreground whitespace-pre-line">
+                <p className="text-foreground/90 whitespace-pre-line text-lg leading-relaxed">
                   {dream.content}
                 </p>
 
                 {dream.meaning && (
-                  <div className="mt-4 p-4 bg-indigo-50 dark:bg-indigo-900/20 rounded-xl border-l-4 border-indigo-500 space-y-3">
-                    <p className="text-sm font-medium text-indigo-700 dark:text-indigo-300 italic leading-relaxed">
-                      <span className="font-bold not-italic">Astrological Meaning:</span> {dream.meaning}
+                  <div className="mt-6 p-6 bg-primary/5 rounded-2xl border border-primary/10 space-y-4 relative">
+                    <div className="absolute top-4 right-4 opacity-20"><Brain className="w-6 h-6 text-primary" /></div>
+                    <p className="text-base text-foreground/80 leading-relaxed">
+                      <span className="font-black text-primary uppercase tracking-widest text-[10px] block mb-2">Neural Analysis</span> {dream.meaning}
                     </p>
 
                     <div className="flex flex-wrap gap-2">
                       {dream.tags?.map((tag, i) => (
-                        <span key={i} className="px-2 py-0.5 bg-indigo-100 dark:bg-indigo-800 text-indigo-600 dark:text-indigo-200 rounded text-[10px] font-bold uppercase tracking-wider">
+                        <span key={i} className="px-3 py-1 bg-primary/10 border border-primary/20 text-primary rounded-lg text-[10px] font-black uppercase tracking-widest">
                           {tag}
                         </span>
                       ))}
                     </div>
 
-                    <div className="text-[11px] text-indigo-600/80 dark:text-indigo-300/80 font-medium">
+                    <div className="text-[10px] text-muted-foreground font-black uppercase tracking-wider flex items-center gap-2">
+                      <span className="w-2 h-2 rounded-full bg-primary/40" />
                       {dream.emotions?.map(e => `${e.label} (${(e.score * 100).toFixed(0)}%)`).join(" • ")}
                     </div>
                   </div>

@@ -1,4 +1,3 @@
-import ThemeProvider from "@/components/ThemeProvider";
 import "./globals.css";
 import SessionProviderWrapper from "./providers/SessionProviderWrapper";
 
@@ -10,10 +9,8 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body>
-        <ThemeProvider>
-          <SessionProviderWrapper>{children}</SessionProviderWrapper>
-        </ThemeProvider>
+      <body className="antialiased">
+        <SessionProviderWrapper>{children}</SessionProviderWrapper>
       </body>
     </html>
   );
