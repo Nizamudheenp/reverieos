@@ -2,7 +2,9 @@
 const nextConfig = {
   /* config options here */
   reactCompiler: true,
-   images: {
+  poweredByHeader: false, // Security: Remove X-Powered-By header
+  compress: true, // Performance: Ensure gzip/brotli compression
+  images: {
     remotePatterns: [
       {
         protocol: "https",
@@ -13,3 +15,4 @@ const nextConfig = {
 };
 
 export default nextConfig;
+

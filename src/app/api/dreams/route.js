@@ -2,8 +2,8 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "../auth/[...nextauth]/route";
 import { connectDB } from "@/lib/mongodb";
 import Dream from "@/models/Dream";
-import Insight from "@/models/Insight";
 import { groq } from "@/lib/groq";
+import { generateInsightForUser } from "../analytics/insight/route";
 
 async function classifyDreamWithGroq(text) {
   const prompt = `
@@ -48,6 +48,11 @@ ${text}
   }
 }
 
+function sanitizeInput(content) {
+  // Basic sanitization: trim and remove excessive whitespace/control characters
+  return content.trim().replace(/[\u0000-\u001F\u007F-\u009F]/g, "");
+}
+
 export async function GET() {
   await connectDB();
   const session = await getServerSession(authOptions);
@@ -62,8 +67,10 @@ export async function POST(req) {
   const session = await getServerSession(authOptions);
   if (!session) return Response.json({ error: "Not authenticated" }, { status: 401 });
 
-  const { content } = await req.json();
-  if (!content || content.trim() === "") {
+  const body = await req.json();
+  const content = sanitizeInput(body.content || "");
+
+  if (!content || content === "") {
     return Response.json({ error: "Dream content is required" }, { status: 400 });
   }
 
@@ -101,14 +108,11 @@ export async function POST(req) {
     { new: true } // Return the modified document
   );
 
+  // Directly call insight generation logic instead of internal fetch
   try {
-    await fetch(`${process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000"}/api/analytics/insight`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ triggerFrom: "dreamCreate" }),
-    }).catch((e) => console.warn("insight regen error:", e));
+    await generateInsightForUser(session.user.id);
   } catch (e) {
-    console.warn("insight regen top-level", e);
+    console.warn("Failed to regenerate insights directly:", e);
   }
 
   return Response.json(updatedDream);
@@ -130,13 +134,13 @@ export async function DELETE(req) {
 
   await Dream.deleteOne({ _id: id });
 
+  // Directly call insight generation logic
   try {
-    await fetch(`${process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000"}/api/analytics/insight`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ triggerFrom: "dreamDelete" }),
-    }).catch((e) => console.warn("insight regen error:", e));
-  } catch (e) { console.warn(e); }
+    await generateInsightForUser(session.user.id);
+  } catch (e) {
+    console.warn("Failed to regenerate insights on delete:", e);
+  }
 
   return Response.json({ success: true });
 }
+

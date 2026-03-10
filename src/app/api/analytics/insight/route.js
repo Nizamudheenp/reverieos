@@ -31,22 +31,24 @@ ${text}
   }
 }
 
-export async function POST(req) {
+/**
+ * Shared logic to generate and save insights for a user.
+ * Can be called from API routes or directly from other server actions/routes.
+ */
+export async function generateInsightForUser(userId) {
   await connectDB();
-  const session = await getServerSession(authOptions);
-  if (!session) return new Response(JSON.stringify({ error: "Not authenticated" }), { status: 401 });
+  const dreams = await Dream.find({ userId }).sort({ createdAt: -1 });
 
-  const dreams = await Dream.find({ userId: session.user.id }).sort({ createdAt: -1 });
   if (!dreams.length) {
-    await Insight.deleteMany({ userId: session.user.id });
-    return new Response(JSON.stringify({ message: "No dreams" }), { status: 200 });
+    await Insight.deleteMany({ userId });
+    return { message: "No dreams" };
   }
 
   const text = dreams.map(d => d.content).join("\n\n");
   const ai = await analyzeAllDreams(text);
 
   const saved = await Insight.create({
-    userId: session.user.id,
+    userId,
     dreamIds: dreams.map(d => d._id),
     summary: ai.summary,
     emotions: ai.emotions,
@@ -54,15 +56,30 @@ export async function POST(req) {
     source: "groq"
   });
 
-  return new Response(JSON.stringify(saved), { status: 200 });
+  return saved;
+}
+
+export async function POST(req) {
+  await connectDB();
+  const session = await getServerSession(authOptions);
+  if (!session) return Response.json({ error: "Not authenticated" }, { status: 401 });
+
+  try {
+    const result = await generateInsightForUser(session.user.id);
+    return Response.json(result, { status: 200 });
+  } catch (error) {
+    console.error("Insight generation error:", error);
+    return Response.json({ error: "Failed to generate insights" }, { status: 500 });
+  }
 }
 
 export async function GET() {
   await connectDB();
   const session = await getServerSession(authOptions);
-  if (!session) return new Response(JSON.stringify({ error: "Not authenticated" }), { status: 401 });
+  if (!session) return Response.json({ error: "Not authenticated" }, { status: 401 });
 
   const last = await Insight.findOne({ userId: session.user.id }).sort({ createdAt: -1 });
-  if (!last) return new Response(JSON.stringify({ message: "No insights yet" }), { status: 200 });
-  return new Response(JSON.stringify(last), { status: 200 });
+  if (!last) return Response.json({ message: "No insights yet" }, { status: 200 });
+  return Response.json(last, { status: 200 });
 }
+
