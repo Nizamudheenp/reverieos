@@ -3,9 +3,14 @@
 import { signIn, useSession } from "next-auth/react";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { Card, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Brain, LogIn } from "lucide-react";
+import { motion } from "framer-motion";
+import { Brain, LogIn, Sparkles, Moon, Eye } from "lucide-react";
+
+const features = [
+  { icon: Moon, label: "Write your daily dreams" },
+  { icon: Eye, label: "View emotional insights" },
+  { icon: Sparkles, label: "Visualize your growth" },
+];
 
 export default function Home() {
   const { data: session, status } = useSession();
@@ -16,70 +21,121 @@ export default function Home() {
       router.push("/dashboard");
     }
   }, [status, router]);
+
   if (status === "loading") return null;
 
   return (
-    <div
-      className="
-        min-h-screen flex flex-col justify-center items-center 
-        bg-gradient-to-br 
-        from-indigo-100 via-white to-purple-100 
-        dark:from-gray-900 dark:via-gray-950 dark:to-black
-        text-gray-800 dark:text-gray-200 
-        p-6
-      "
-    >
+    <div className="min-h-screen flex flex-col justify-center items-center p-4 sm:p-6 relative overflow-hidden">
+      {/* Animated background orbs */}
+      <div className="pointer-events-none absolute inset-0 overflow-hidden">
+        <motion.div
+          animate={{ scale: [1, 1.15, 1], opacity: [0.12, 0.22, 0.12] }}
+          transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+          className="absolute top-[10%] left-[15%] w-[40vw] h-[40vw] max-w-md max-h-md rounded-full"
+          style={{ background: "radial-gradient(circle, oklch(40.316% 0.15821 350.818 / 0.35) 0%, transparent 70%)" }}
+        />
+        <motion.div
+          animate={{ scale: [1, 1.2, 1], opacity: [0.08, 0.18, 0.08] }}
+          transition={{ duration: 11, repeat: Infinity, ease: "easeInOut", delay: 3 }}
+          className="absolute bottom-[10%] right-[10%] w-[35vw] h-[35vw] max-w-sm max-h-sm rounded-full"
+          style={{ background: "radial-gradient(circle, oklch(0.45 0.18 5 / 0.3) 0%, transparent 70%)" }}
+        />
+        <motion.div
+          animate={{ scale: [1, 1.1, 1], opacity: [0.06, 0.14, 0.06] }}
+          transition={{ duration: 14, repeat: Infinity, ease: "easeInOut", delay: 6 }}
+          className="absolute top-[55%] left-[50%] w-[30vw] h-[30vw] max-w-xs max-h-xs rounded-full -translate-x-1/2 -translate-y-1/2"
+          style={{ background: "radial-gradient(circle, oklch(0.48 0.20 320 / 0.25) 0%, transparent 70%)" }}
+        />
+      </div>
+
       {status === "unauthenticated" && (
-        <>
-          <div className="flex items-center gap-3 mb-4">
-            <Brain className="w-10 h-10 text-indigo-600 dark:text-indigo-400" />
-            <h1 className="text-4xl font-bold text-indigo-700 dark:text-indigo-300">
+        <motion.div
+          className="relative z-10 flex flex-col items-center w-full max-w-md"
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, ease: "easeOut" }}
+        >
+          {/* Logo */}
+          <motion.div
+            className="flex items-center gap-3 mb-6 sm:mb-8"
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: 0.1, duration: 0.6 }}
+          >
+            <motion.div
+              animate={{ rotate: [0, 5, -5, 0] }}
+              transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+            >
+              <Brain
+                className="w-10 h-10 sm:w-12 sm:h-12"
+                style={{ color: "oklch(40.316% 0.15821 350.818)", filter: "drop-shadow(0 0 12px oklch(40.316% 0.15821 350.818 / 0.7))" }}
+              />
+            </motion.div>
+            <h1 className="font-display font-bold neon-text tracking-tight text-3xl sm:text-4xl lg:text-5xl">
               ReverieOS
             </h1>
-          </div>
+          </motion.div>
 
-          <Card
-            className="
-              max-w-lg shadow-xl border-0 
-              bg-white/80 dark:bg-gray-800/70 
-              backdrop-blur-lg rounded-2xl
-            "
+          {/* Card */}
+          <motion.div
+            className="w-full neon-card neon-border-glow p-6 sm:p-8 text-center space-y-5"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.25, duration: 0.6 }}
           >
-            <CardContent className="p-8 text-center space-y-4">
-              <h2 className="text-2xl font-semibold">
-                Your Digital Dream Operating System 
+            <div className="space-y-2">
+              <h2 className="font-display font-bold text-foreground text-lg sm:text-xl lg:text-2xl leading-snug">
+                Your Digital Dream<br />Operating System
               </h2>
-
-              <p className="text-gray-600 dark:text-gray-300 leading-relaxed">
-                Capture your thoughts, dreams, and emotions in one peaceful space.
-                Let AI reflect on your patterns and reveal the hidden meaning behind your mind.
+              <p className="text-muted-foreground leading-relaxed text-sm sm:text-base">
+                Capture thoughts, dreams, and emotions. Let AI reveal the hidden meaning behind your mind.
               </p>
+            </div>
 
-              <ul className="text-gray-700 dark:text-gray-300 text-sm mt-4 space-y-2">
-                <li>Write your daily dreams</li>
-                <li>View emotional insights</li>
-                <li>Visualize your growth</li>
-              </ul>
+            {/* Feature list */}
+            <ul className="space-y-2 text-left">
+              {features.map(({ icon: Icon, label }) => (
+                <li key={label} className="flex items-center gap-3 text-sm sm:text-base text-foreground/80">
+                  <span
+                    className="shrink-0 w-7 h-7 rounded-full flex items-center justify-center"
+                    style={{
+                      background: "oklch(40.316% 0.15821 350.818 / 0.12)",
+                      border: "1px solid oklch(40.316% 0.15821 350.818 / 0.3)",
+                    }}
+                  >
+                    <Icon className="w-3.5 h-3.5" style={{ color: "oklch(40.316% 0.15821 350.818)" }} />
+                  </span>
+                  {label}
+                </li>
+              ))}
+            </ul>
 
-              <Button
-                onClick={() => signIn("google")}
-                className="
-                  w-full mt-6 
-                  bg-indigo-600 hover:bg-indigo-700 
-                  dark:bg-indigo-500 dark:hover:bg-indigo-600 
-                  text-white 
-                  flex items-center justify-center gap-2 py-2
-                "
-              >
-                <LogIn className="w-5 h-5" /> Sign in with Google
-              </Button>
-            </CardContent>
-          </Card>
+            {/* Sign in button */}
+            <motion.button
+              onClick={() => signIn("google")}
+              whileHover={{ scale: 1.03 }}
+              whileTap={{ scale: 0.97 }}
+              className="w-full mt-2 flex items-center justify-center gap-2 py-3 px-6 rounded-xl font-semibold text-sm sm:text-base text-white transition-all duration-300 relative overflow-hidden group"
+              style={{
+                background: "linear-gradient(135deg, oklch(40.316% 0.15821 350.818), oklch(0.48 0.20 320))",
+                boxShadow: "0 0 20px oklch(40.316% 0.15821 350.818 / 0.4), 0 4px 15px rgba(0,0,0,0.3)",
+              }}
+            >
+              <span className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl" />
+              <LogIn className="w-4 h-4 sm:w-5 sm:h-5 shrink-0 relative z-10" />
+              <span className="relative z-10">Enter the Dream World</span>
+            </motion.button>
+          </motion.div>
 
-          <p className="mt-6 text-sm text-gray-500 dark:text-gray-400">
-            © 2025 ReverieOS – Crafted with calm.
-          </p>
-        </>
+          <motion.p
+            className="mt-5 text-xs sm:text-sm text-muted-foreground/60"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.5 }}
+          >
+            © 2025 ReverieOS — Where dreams reveal their secrets.
+          </motion.p>
+        </motion.div>
       )}
     </div>
   );

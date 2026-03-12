@@ -14,7 +14,7 @@ export default async function DashboardPage() {
       href: "/dashboard/journal",
     },
     {
-      title: "AI Insights",
+      title: "Insights",
       desc: "View emotional and trend analysis.",
       href: "/dashboard/insights",
     },
@@ -26,7 +26,8 @@ export default async function DashboardPage() {
   ];
 
   return (
-    
-          <DashboardClient session={session} cards={cards} />
-       
-  )}
+
+    <DashboardClient session={session} cards={cards} />
+
+  )
+}

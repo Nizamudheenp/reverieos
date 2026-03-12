@@ -132,7 +132,7 @@ export default function JournalPage() {
         >
           <div className="flex items-center gap-3">
             <span className="text-2xl">✨</span>
-            <h2 className="text-xl font-bold uppercase tracking-widest">AI Interpretation:</h2>
+            <h2 className="text-xl font-bold uppercase tracking-widest">Dream Interpretation:</h2>
           </div>
           <p className="text-xl italic leading-relaxed font-medium">
             &quot;{lastResult.meaning || "The stars are shifting, but their meaning is yet to be revealed..."}&quot;

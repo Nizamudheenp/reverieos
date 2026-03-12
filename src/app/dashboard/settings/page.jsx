@@ -112,7 +112,7 @@ export default function SettingsPage() {
 
         <div className="flex flex-wrap gap-4">
           <button
-            className="px-6 py-3 bg-primary text-black hover:bg-primary/90 rounded-xl transition-all duration-300 font-black uppercase tracking-widest shadow-[0_0_20px_rgba(oklch(0.7_0.35_300),0.3)]"
+            className="px-4 py-2 bg-primary text-black hover:bg-primary/90 rounded-xl transition-all duration-300 font-black uppercase  shadow-[0_0_20px_rgba(oklch(0.7_0.35_300),0.3)]"
             onClick={exportDreams}
             disabled={busy}
           >
@@ -120,7 +120,7 @@ export default function SettingsPage() {
           </button>
 
           <button
-            className="px-6 py-3 bg-primary text-black hover:bg-primary/90 rounded-xl transition-all duration-300 font-black uppercase tracking-widest shadow-[0_0_20px_rgba(oklch(0.7_0.35_300),0.3)]"
+            className="px-4 py-2 bg-primary text-black hover:bg-primary/90 rounded-xl transition-all duration-300 font-black uppercase  shadow-[0_0_20px_rgba(oklch(0.7_0.35_300),0.3)]"
             onClick={clearDreams}
             disabled={busy}
           >
@@ -138,7 +138,7 @@ export default function SettingsPage() {
 
         <div className="flex flex-wrap gap-4">
           <button
-            className="px-6 py-3 bg-primary text-black hover:bg-primary/90 rounded-xl transition-all duration-300 font-black uppercase tracking-widest shadow-[0_0_20px_rgba(oklch(0.7_0.35_300),0.3)]"
+            className="px-4 py-2 bg-primary text-black hover:bg-primary/90 rounded-xl transition-all duration-300 font-black uppercase shadow-[0_0_20px_rgba(oklch(0.7_0.35_300),0.3)]"
             onClick={() => signOut({ callbackUrl: "/" })}
             disabled={busy}
           >
@@ -146,7 +146,7 @@ export default function SettingsPage() {
           </button>
 
           <button
-            className="px-6 py-3 bg-red-500/10 hover:bg-red-500/20 text-red-500 rounded-xl transition-all duration-300 border border-red-500/20 disabled:opacity-50"
+            className="px-4 py-2 bg-red-500/10 hover:bg-red-500/20 text-red-500 rounded-xl transition-all duration-300 border border-red-500/20 disabled:opacity-50"
             onClick={deleteAccount}
             disabled={busy}
           >
