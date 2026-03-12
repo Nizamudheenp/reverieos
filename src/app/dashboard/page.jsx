@@ -10,7 +10,7 @@ export default async function DashboardPage() {
   const cards = [
     {
       title: "Dream Logs",
-      desc: "Record and revisit your nightly dreams.",
+      desc: "Record and decode your hidden dreams.",
       href: "/dashboard/journal",
     },
     {

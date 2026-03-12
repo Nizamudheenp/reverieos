@@ -29,33 +29,7 @@ export default function SettingsPage() {
   }
 
 
-  async function exportDreams() {
-    setBusy(true);
-    try {
-      const res = await fetch("/api/data/export");
-      if (!res.ok) {
-        showToast("Export failed");
-        setBusy(false);
-        return;
-      }
-      const data = await res.json();
-      const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = `dreams-${new Date().toISOString().slice(0, 10)}.json`;
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
-      URL.revokeObjectURL(url);
-      showToast("Export downloaded");
-    } catch (e) {
-      console.error(e);
-      showToast("Export error");
-    } finally {
-      setBusy(false);
-    }
-  }
+
 
   async function clearDreams() {
     if (!confirm("Clear all dreams? This will delete all your dream entries. This cannot be undone.")) return;
@@ -111,13 +85,7 @@ export default function SettingsPage() {
         <h2 className="font-semibold text-primary uppercase tracking-widest text-sm">Data Management</h2>
 
         <div className="flex flex-wrap gap-4">
-          <button
-            className="px-4 py-2 bg-primary text-black hover:bg-primary/90 rounded-xl transition-all duration-300 font-black uppercase  shadow-[0_0_20px_rgba(oklch(0.7_0.35_300),0.3)]"
-            onClick={exportDreams}
-            disabled={busy}
-          >
-            Export all dreams (JSON)
-          </button>
+
 
           <button
             className="px-4 py-2 bg-primary text-black hover:bg-primary/90 rounded-xl transition-all duration-300 font-black uppercase  shadow-[0_0_20px_rgba(oklch(0.7_0.35_300),0.3)]"
@@ -129,7 +97,7 @@ export default function SettingsPage() {
         </div>
 
         <p className="text-sm text-muted-foreground">
-          Export downloads a JSON file. Clear deletes only dreams & insights; your account remains.
+          Note: Clearing all dreams will delete only your entries and insights; your account will remain.
         </p>
       </section>
 
