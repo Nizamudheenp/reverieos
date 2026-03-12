@@ -85,7 +85,7 @@ export default function JournalPage() {
     <div className="max-w-3xl mx-auto p-6 space-y-8">
       <div className="flex items-center justify-between">
         <h1 className="text-4xl font-bold text-primary neon-text tracking-tight">Journal</h1>
-        <div className="text-[11px] font-bold text-secondary bg-secondary/10 px-4 py-1 rounded-full border border-secondary/20 uppercase tracking-widest">
+        <div className="text-[11px] font-bold text-secondary bg-secondary/10 px-4 py-1 rounded-full border border-secondary/20 uppercase ">
           Mystical Insights
         </div>
       </div>

@@ -63,10 +63,10 @@ export default function AnalyticsPage() {
       )}
 
       <div className="bg-card p-4 rounded-2xl shadow">
-        <h3 className="font-semibold text-primary mb-2">Dreams (last 14 days)</h3>
-        <div style={{ width: "100%", height: 220 }}>
+        <h3 className="font-semibold text-primary mb-2 text-center sm:text-left">Dreams (last 14 days)</h3>
+        <div style={{ width: "100%", height: 220 }} className="flex justify-center">
           <ResponsiveContainer>
-            <LineChart data={freq}>
+            <LineChart data={freq} margin={{ top: 10, right: 30, left: -20, bottom: 0 }}>
               <XAxis dataKey="date" tickFormatter={(d) => d.slice(5)} />
               <YAxis allowDecimals={false} />
               <Tooltip />
@@ -78,10 +78,10 @@ export default function AnalyticsPage() {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         <div className="bg-card p-4 rounded-2xl shadow">
-          <h3 className="font-semibold text-primary mb-2">Emotion distribution</h3>
-          <div style={{ width: "100%", height: 240 }}>
+          <h3 className="font-semibold text-primary mb-2 text-center sm:text-left">Emotion distribution</h3>
+          <div style={{ width: "100%", height: 240 }} className="flex justify-center">
             <ResponsiveContainer>
-              <PieChart>
+              <PieChart margin={{ top: 0, right: 0, left: 0, bottom: 0 }}>
                 <Pie data={emotions} dataKey="value" nameKey="label" label>
                   {emotions.map((entry, i) => <Cell key={i} fill={COLORS[i % COLORS.length]} />)}
                 </Pie>
@@ -92,10 +92,10 @@ export default function AnalyticsPage() {
         </div>
 
         <div className="bg-card p-4 rounded-2xl shadow">
-          <h3 className="font-semibold text-primary mb-2">Top tags</h3>
-          <div style={{ width: "100%", height: 240 }}>
+          <h3 className="font-semibold text-primary mb-2 text-center sm:text-left">Top tags</h3>
+          <div style={{ width: "100%", height: 240 }} className="flex justify-center">
             <ResponsiveContainer>
-              <BarChart data={tags}>
+              <BarChart data={tags} margin={{ top: 10, right: 20, left: -20, bottom: 0 }}>
                 <XAxis dataKey="tag" />
                 <YAxis allowDecimals={false} />
                 <Tooltip />

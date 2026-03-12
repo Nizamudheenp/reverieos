@@ -8,8 +8,8 @@ import { Brain, LogIn, Sparkles, Moon, Eye } from "lucide-react";
 
 const features = [
   { icon: Moon, label: "Write your daily dreams" },
-  { icon: Eye, label: "View emotional insights" },
-  { icon: Sparkles, label: "Visualize your growth" },
+  { icon: Eye, label: "Decode your dreams" },
+  { icon: Sparkles, label: "View emotional insights" },
 ];
 
 export default function Home() {
@@ -88,7 +88,7 @@ export default function Home() {
                 Your Digital Dream<br />Operating System
               </h2>
               <p className="text-muted-foreground leading-relaxed text-sm sm:text-base">
-                Capture thoughts, dreams, and emotions. Let AI reveal the hidden meaning behind your mind.
+                Capture dreams, and emotions. Let ReverieOS reveal the hidden meaning behind your mind.
               </p>
             </div>
 
@@ -115,7 +115,7 @@ export default function Home() {
               onClick={() => signIn("google")}
               whileHover={{ scale: 1.03 }}
               whileTap={{ scale: 0.97 }}
-              className="w-full mt-2 flex items-center justify-center gap-2 py-3 px-6 rounded-xl font-semibold text-sm sm:text-base text-white transition-all duration-300 relative overflow-hidden group"
+              className="w-full mt-2 flex items-center justify-center gap-2 py-3 px-6 rounded-xl font-semibold text-sm sm:text-base text-white transition-all duration-300 cursor-pointer relative overflow-hidden group"
               style={{
                 background: "linear-gradient(135deg, oklch(40.316% 0.15821 350.818), oklch(0.48 0.20 320))",
                 boxShadow: "0 0 20px oklch(40.316% 0.15821 350.818 / 0.4), 0 4px 15px rgba(0,0,0,0.3)",
@@ -123,7 +123,7 @@ export default function Home() {
             >
               <span className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl" />
               <LogIn className="w-4 h-4 sm:w-5 sm:h-5 shrink-0 relative z-10" />
-              <span className="relative z-10">Enter the Dream World</span>
+              <span className="relative z-10">Sign in with Google</span>
             </motion.button>
           </motion.div>
 

@@ -158,9 +158,11 @@ export default function DashboardLayout({ children }) {
                     paddingLeft: !collapsed && !isMobile ? 288 : 0,
                 }}
                 transition={{ type: "spring", stiffness: 220, damping: 28 }}
-                className="min-h-screen px-4 sm:px-6 lg:px-8 pt-16 pb-10"
+                className="min-h-screen pt-16 pb-10 w-full"
             >
-                {children}
+                <div className="px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full">
+                    {children}
+                </div>
             </motion.main>
         </div>
     );
