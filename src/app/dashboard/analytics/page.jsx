@@ -107,7 +107,7 @@ export default function AnalyticsPage() {
       </div>
 
       <div className="bg-card p-4 rounded-2xl shadow">
-        <h3 className="font-semibold text-primary mb-2">Deep AI Insight</h3>
+        <h3 className="font-semibold text-primary mb-2">Deep Insight</h3>
         {!insight ? (
           <p className="text-muted-foreground">No insight yet. Add dreams to generate an insight.</p>
         ) : (
