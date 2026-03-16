@@ -31,20 +31,17 @@ export default function Home() {
         <motion.div
           animate={{ scale: [1, 1.15, 1], opacity: [0.12, 0.22, 0.12] }}
           transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-          className="absolute top-[10%] left-[15%] w-[40vw] h-[40vw] max-w-md max-h-md rounded-full"
-          style={{ background: "radial-gradient(circle, oklch(40.316% 0.15821 350.818 / 0.35) 0%, transparent 70%)" }}
+          className="absolute top-[10%] left-[15%] w-[40vw] h-[40vw] max-w-md max-h-md rounded-full bg-primary/10 blur-[80px]"
         />
         <motion.div
           animate={{ scale: [1, 1.2, 1], opacity: [0.08, 0.18, 0.08] }}
           transition={{ duration: 11, repeat: Infinity, ease: "easeInOut", delay: 3 }}
-          className="absolute bottom-[10%] right-[10%] w-[35vw] h-[35vw] max-w-sm max-h-sm rounded-full"
-          style={{ background: "radial-gradient(circle, oklch(0.45 0.18 5 / 0.3) 0%, transparent 70%)" }}
+          className="absolute bottom-[10%] right-[10%] w-[35vw] h-[35vw] max-w-sm max-h-sm rounded-full bg-secondary/10 blur-[80px]"
         />
         <motion.div
           animate={{ scale: [1, 1.1, 1], opacity: [0.06, 0.14, 0.06] }}
           transition={{ duration: 14, repeat: Infinity, ease: "easeInOut", delay: 6 }}
-          className="absolute top-[55%] left-[50%] w-[30vw] h-[30vw] max-w-xs max-h-xs rounded-full -translate-x-1/2 -translate-y-1/2"
-          style={{ background: "radial-gradient(circle, oklch(0.48 0.20 320 / 0.25) 0%, transparent 70%)" }}
+          className="absolute top-[55%] left-[50%] w-[30vw] h-[30vw] max-w-xs max-h-xs rounded-full -translate-x-1/2 -translate-y-1/2 bg-muted/20 blur-[80px]"
         />
       </div>
 
@@ -67,8 +64,7 @@ export default function Home() {
               transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
             >
               <Brain
-                className="w-10 h-10 sm:w-12 sm:h-12"
-                style={{ color: "oklch(40.316% 0.15821 350.818)", filter: "drop-shadow(0 0 12px oklch(40.316% 0.15821 350.818 / 0.7))" }}
+                className="w-10 h-10 sm:w-12 sm:h-12 text-primary"
               />
             </motion.div>
             <h1 className="font-display font-bold neon-text tracking-tight text-3xl sm:text-4xl lg:text-5xl">
@@ -97,13 +93,9 @@ export default function Home() {
               {features.map(({ icon: Icon, label }) => (
                 <li key={label} className="flex items-center gap-3 text-sm sm:text-base text-foreground/80">
                   <span
-                    className="shrink-0 w-7 h-7 rounded-full flex items-center justify-center"
-                    style={{
-                      background: "oklch(40.316% 0.15821 350.818 / 0.12)",
-                      border: "1px solid oklch(40.316% 0.15821 350.818 / 0.3)",
-                    }}
+                    className="shrink-0 w-7 h-7 rounded-full flex items-center justify-center bg-primary/10 border border-border"
                   >
-                    <Icon className="w-3.5 h-3.5" style={{ color: "oklch(40.316% 0.15821 350.818)" }} />
+                    <Icon className="w-3.5 h-3.5 text-primary" />
                   </span>
                   {label}
                 </li>
@@ -115,11 +107,7 @@ export default function Home() {
               onClick={() => signIn("google")}
               whileHover={{ scale: 1.03 }}
               whileTap={{ scale: 0.97 }}
-              className="w-full mt-2 flex items-center justify-center gap-2 py-3 px-6 rounded-xl font-semibold text-sm sm:text-base text-white transition-all duration-300 cursor-pointer relative overflow-hidden group"
-              style={{
-                background: "linear-gradient(135deg, oklch(40.316% 0.15821 350.818), oklch(0.48 0.20 320))",
-                boxShadow: "0 0 20px oklch(40.316% 0.15821 350.818 / 0.4), 0 4px 15px rgba(0,0,0,0.3)",
-              }}
+              className="w-full mt-2 flex items-center justify-center gap-2 py-3 px-6 rounded-xl font-semibold text-sm sm:text-base text-primary-foreground bg-primary hover:bg-primary/90 transition-all duration-300 cursor-pointer relative overflow-hidden group"
             >
               <span className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl" />
               <LogIn className="w-4 h-4 sm:w-5 sm:h-5 shrink-0 relative z-10" />

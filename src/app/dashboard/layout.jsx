@@ -83,7 +83,7 @@ export default function DashboardLayout({ children }) {
             >
                 <div className="flex items-center justify-between px-5 py-5 mb-2">
                     <h1 className="text-xl font-bold neon-text flex items-center gap-2 tracking-tight font-display">
-                        <Brain className="w-7 h-7 shrink-0" style={{ color: "oklch(40.316% 0.15821 350.818)" }} />
+                        <Brain className="w-7 h-7 shrink-0 text-primary" />
                         <span className="truncate">ReverieOS</span>
                     </h1>
                     <Button

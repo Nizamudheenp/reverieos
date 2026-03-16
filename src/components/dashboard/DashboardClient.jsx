@@ -63,7 +63,7 @@ export default function DashboardClient({ session, cards }) {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2, duration: 0.7 }}
         >
-          <h2 className="font-display font-bold neon-text-intense tracking-tighter uppercase leading-[0.9] text-3xl sm:text-5xl lg:text-7xl">
+          <h2 className="font-display font-bold neon-text-intense tracking-tighter uppercase leading-[1.1] text-3xl sm:text-5xl lg:text-7xl">
             Welcome to <br /> <span className="text-foreground">ReverieOS</span>
           </h2>
           <p className="text-foreground/80 md:text-lg lg:text-xl font-medium max-w-xl mx-auto leading-relaxed">
@@ -97,7 +97,6 @@ export default function DashboardClient({ session, cards }) {
 
         <div className="relative z-10">
           <div className="flex items-center gap-3 mb-6 sm:mb-8">
-            <div className="h-6 w-[2px] bg-primary shadow-[0_0_10px_oklch(40.316%_0.15821_350.818)]" />
             <h3 className="font-display font-bold neon-text text-xl sm:text-3xl tracking-tight uppercase">
               Deep Neural Reflection
             </h3>
@@ -125,7 +124,7 @@ export default function DashboardClient({ session, cards }) {
             <div className="space-y-8 sm:space-y-12">
               <div className="max-w-4xl">
                 <p className="font-bold text-secondary uppercase tracking-[0.2em] text-[10px] sm:text-xs mb-4">Latest Pattern Analysis</p>
-                <p className="text-lg sm:text-2xl lg:text-3xl font-medium leading-normal text-foreground/90">
+                <p className="text-lg sm:text-2xl lg:text-3xl font-sm leading-normal text-foreground/90">
                   &ldquo;{reflections.summary}&rdquo;
                 </p>
               </div>
