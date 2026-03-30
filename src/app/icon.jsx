@@ -18,7 +18,7 @@ export default function Icon() {
           alignItems: 'center',
           justifyContent: 'center',
           color: '#faeaea', // Matches foreground oklch(0.98 0 0)
-          borderRadius: '4px',
+          borderRadius: '100%',
         }}
       >
         <svg
